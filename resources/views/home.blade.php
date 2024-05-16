@@ -12,7 +12,7 @@
 </head>
 <body class="h-full">
 
-  <div class="min-h-full">
+
     <nav class="bg-white-green" x-data="{ isOpen: false }">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
@@ -24,9 +24,8 @@
               <div class="ml-10 flex items-baseline space-x-4">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                 <a href="/" class="text-black-gd rounded-md px-3 py-2 text-sm font-bold" aria-current="page">Home</a>
-                <a href="/blog" class="text-black-gd hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-bold">Blog</a>
                 <a href="/about" class="text-black-gd hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-bold">About</a>
-                <a href="/contact" class="text-black-gd hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-bold">Contact</a>
+
 
               </div>
             </div>
@@ -127,17 +126,23 @@
       </div>
     </nav>
 
-    <header class="bg-white shadow">
-      <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900">Home</h1>
-      </div>
-    </header>
+
     <main>
-      <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <!-- Your content -->
-      </div>
-    </main>
-  </div>
+        <div class="relative w-full py-36 sm:px-6 lg:px-8 bg-cover bg-center" style="background-image: url(img/kamar.jpg)">
+          <div class="absolute inset-0 bg-white-green opacity-65"></div>
+          <div class="relative z-10 mx-32 flex justify-between items-center">
+                <div>
+                    <h2 class="text-5xl font-bold text-black-blue">Cari Kos</h2>
+                    <h2 class="text-4xl font-bold text-green-gd">Lebih Mudah</h2>
+
+                </div>
+                <div class="relative">
+                    <input type="text" placeholder="Cari Kos" class="py-4 pl-4 pr-20 rounded-2xl focus:outline-none focus:ring-1 focus:ring-green-gd">
+                </div>
+            </div>
+        </div>
+      </main>
+
 
 </body>
 </html>
