@@ -10,8 +10,8 @@ Route::get('/about', function () {
     return view('about', ['nama' => 'Zumar']);
 });
 
-Route::get('/blog', function () {
-    return view('blog', ['nama' => 'Zumar']);
+Route::get('/login', function () {
+    return view('login');
 });
 
 Route::get('/contact', function () {

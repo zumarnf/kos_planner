@@ -24,7 +24,7 @@
               <div class="ml-10 flex items-baseline space-x-4">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                 <a href="/" class="text-black-gd rounded-md px-3 py-2 text-sm font-bold" aria-current="page">Home</a>
-                <a href="/about" class="text-black-gd hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-bold">About</a>
+                <a href="/about" class="text-black-gd hover:bg-green-gd hover:text-white-green rounded-md px-3 py-2 text-sm font-bold">About</a>
 
 
               </div>
@@ -140,6 +140,14 @@
                     <input type="text" placeholder="Cari Kos" class="py-4 pl-4 pr-20 rounded-2xl focus:outline-none focus:ring-1 focus:ring-green-gd">
                 </div>
             </div>
+        </div>
+
+        <div class="grid grid-cols-4 ml-16 mr-16">
+            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
+            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
+            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
+            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
+            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
         </div>
       </main>
 

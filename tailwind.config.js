@@ -7,16 +7,18 @@ module.exports = {
         "./resources/**/*.vue",
     ],
     theme: {
-        colors: {
-            "white-green": "#fafffb",
-            "black-blue": "#394146",
-            "green-gd": "#78ad87",
-            "grey-gd": "#8d8d8d",
-            "black-gd": "#263238",
-        },
         extend: {
             fontFamily: {
                 sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                "white-green": "#fafffb",
+                "black-blue": "#394146",
+                "green-gd": "#78ad87",
+                "grey-gd": "#8d8d8d",
+                "black-gd": "#263238",
+                "lg-green": "#E6FFED",
+                "grey-gh": "#BBBDBC",
             },
         },
     },
