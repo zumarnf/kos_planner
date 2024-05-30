@@ -133,20 +133,42 @@
           <div class="relative z-10 mx-32 flex justify-between items-center">
                 <div>
                     <h2 class="text-5xl font-bold text-black-blue">Cari Kos</h2>
-                    <h2 class="text-4xl font-bold text-green-gd">Lebih Mudah</h2>
+                    <h2 class="text-6xl font-bold text-green-gd">Lebih Mudah</h2>
 
                 </div>
                 <div class="relative">
-                    <input type="text" placeholder="Cari Kos" class="py-4 pl-4 pr-20 rounded-2xl focus:outline-none focus:ring-1 focus:ring-green-gd">
+                    <input type="text" placeholder="Cari Kos" class="py-4 pl-10 pr-24 rounded-2xl focus:outline-none focus:ring-1 focus:ring-green-gd">
                 </div>
             </div>
         </div>
 
         <div class="grid grid-cols-4 ml-16 mr-16">
-            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
-            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
-            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
-            <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
+            <div class="w-60 h-80 bg-white-green my-8 mx-12 p-3 flex flex-col gap-1 rounded-2xl">
+                <div class="h-48 bg-gray-700 rounded-xl"></div>
+                <div class="flex flex-col gap-4">
+                  <div class="flex flex-row justify-between">
+                    <div class="flex flex-col">
+                      <span class="text-xl font-bold text-black-blue">Long Chair</span>
+                      <p class="text-xs text-gray-700">ID: 23432252</p>
+                    </div>
+                    <span class="font-bold  text-red-600">$25.99</span>
+                  </div>
+                  <button class="hover:bg-green-gd text-gray-50 bg-black-blue py-2 rounded-md">Add to cart</button>
+                </div>
+              </div>
+              <div class="w-60 h-80 bg-white-green my-8 mx-12 p-3 flex flex-col gap-1 rounded-2xl">
+                <div class="h-48 bg-gray-700 rounded-xl"></div>
+                <div class="flex flex-col gap-4">
+                  <div class="flex flex-row justify-between">
+                    <div class="flex flex-col">
+                      <span class="text-xl font-bold text-black-blue">Long Chair</span>
+                      <p class="text-xs text-gray-700">ID: 23432252</p>
+                    </div>
+                    <span class="font-bold  text-red-600">$25.99</span>
+                  </div>
+                  <button class="hover:bg-green-gd text-gray-50 bg-black-blue py-2 rounded-md">Add to cart</button>
+                </div>
+              </div>
             <div class="bg-white-green border border-solid border-grey-gd justify-center items-center text-center my-8 mx-12 w-64 h-72">5</div>
         </div>
       </main>

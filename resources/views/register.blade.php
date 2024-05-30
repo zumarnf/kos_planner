@@ -18,8 +18,8 @@
         <div class="flex flex-row w-full h-full">
             <div class="basis-1/2 flex items-center bg-lg-green">
                 <div class="flex flex-col ml-28">
-                    <div class="font-extrabold text-green-gd text-6xl">Easy Stays,</div>
-                    <div class="font-extrabold text-black-blue text-7xl">Happy Days</div>
+                    <div class="font-extrabold text-green-gd text-6xl">Find Peace</div>
+                    <div class="font-extrabold text-black-blue text-7xl">of Mind</div>
                 </div>
             </div>
             <div class="basis-1/2 flex flex-col justify-center items-center bg-white-green">
@@ -33,22 +33,27 @@
                 </div>
                 <div class="w-full px-36">
                     <div class="mb-4">
+                        <label for="name" class="block text-grey-gh font-medium mb-2">Your Name</label>
+                        <input type="text" id="email" placeholder="Name" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
+                    </div>
+                    <div class="mb-4">
+                        <label for="name" class="block text-grey-gh font-medium mb-2">Phone Number</label>
+                        <input type="number" id="email" placeholder="Phone Number" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
+                    </div>
+                    <div class="mb-4">
                         <label for="email" class="block text-grey-gh font-medium mb-2">Email</label>
                         <input type="email" id="email" placeholder="Email" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-10">
                         <label for="password" class="block text-grey-gh font-medium mb-2">Password</label>
                         <input type="password" id="password" placeholder="Password" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
                     </div>
-                    <div class="mb-8 flex justify-end">
-                        <a href="#" class="text-end justify-end items-end text-green-gd">Forgot password?</a>
-                    </div>
                     <div class="mb-10">
-                        <button type="submit" class="bg-black-gd w-full py-2 text-white-green my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#78ad87] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0">Login</button>
+                        <button type="submit" class="bg-black-gd w-full py-2 text-white-green my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#78ad87] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0">Register</button>
                     </div>
                     <div class="mb-8 flex justify-center text-center">
-                        <div class="mr-2 text-grey-gh">Don't have acount?</div>
-                        <a href="/register" class="text-end justify-end items-end text-green-gd">Register here!</a>
+                        <div class="mr-2 text-grey-gh">Already have an acount?</div>
+                        <a href="/login" class="text-end justify-end items-end text-green-gd">Let's Login!</a>
                     </div>
                 </div>
             </div>
