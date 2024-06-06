@@ -3,7 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('home/home');
+});
+
+Route::get('/dashboard', function () {
+    return view('adminkos/dashboard');
 });
 
 Route::get('/about', function () {
