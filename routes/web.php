@@ -10,6 +10,10 @@ Route::get('/dashboard', function () {
     return view('adminkos/dashboard');
 });
 
+Route::get('/detail', function () {
+    return view('detailpage/detail');
+});
+
 Route::get('/about', function () {
     return view('about', ['nama' => 'Zumar']);
 });
