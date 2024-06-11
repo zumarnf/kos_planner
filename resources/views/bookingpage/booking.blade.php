@@ -28,19 +28,23 @@
 
             </div>
             <div class="basis-1/2 flex flex-col">
+                @if ($rooms)
                 <div class="flex items-start justify-start mx-24">
                     <div class="text-2xl font-bold mb-4 ">
-                        {{ $detail['title'] }}
+                        {{ $rooms['title'] }}
                     </div>
                 </div>
                 <div class="flex items-start justify-start mx-24 mb-44">
                     <div class="text-xl font-bold">
-                        Harga: {{ $detail['price'] }}
+                        Harga: {{ $rooms['price'] }}
                     </div>
                 </div>
                 <div class="flex justify-center items-center">
                     <button type="submit" class="bg-black-gd w-full md:w-64 py-2 text-white-green my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#78ad87] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0 px-36 md:px-12">Pay</button>
                 </div>
+                @else
+                <p>Data tidak ditemukan</p>
+                @endif
             </div>
         </div>
 
