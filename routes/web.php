@@ -21,24 +21,47 @@ Route::get('/', function () {
 });
 
 Route::get('detaildorm/detaildorms/{slug}', function ($slug) {
-    return view('detaildorm/detaildorms', ['title' => 'Dorm',
-    'rooms'=>[
+    $dorms = [
         [
-            'slug' => 'kamar-1',
-            'title' => 'Kamar 1',
-            'gambar' => 'img/kamar.jpg',
-            'price' => '100000',
-            'lokasi' => 'Surabaya'
+            'slug' => 'kos-1',
+            'gambarkos'=>'img/kamar4.jpg',
+            'owner' =>'Bechkam',
+            'title' => 'Kos Angkasa Putih',
         ],
         [
-            'slug' => 'kamar-2',
-            'title' => 'Kamar 2',
-            'gambar' => 'img/kamar2.jpg',
-            'price' => '200000',
-            'lokasi' => 'Malang'
+            'slug' => 'kos-2',
+            'gambarkos'=>'img/kamar3.jpg',
+            'owner' =>'Messi',
+            'title' => 'Kos Angkasa Merah',
         ]
-    ]
-]);
+    ];
+    $detail = Arr::first($dorms, function ($detail) use ($slug) {
+        return $detail['slug'] == $slug;
+    });
+    return view('detaildorm/detaildorms', [
+        'title' => 'Dorm',
+        'detail' => $detail,
+        'rooms' => [
+            [
+                'slug' => 'kamar-1',
+                'gambarkos' => 'img/kamar4.jpg',
+                'owner' => 'Bechkam',
+                'title' => 'Kamar 1',
+                'gambar' => 'img/kamar.jpg',
+                'price' => '100000',
+                'lokasi' => 'Surabaya'
+            ],
+            [
+                'slug' => 'kamar-2',
+                'gambarkos' => 'img/kamar3.jpg',
+                'owner' => 'Messi',
+                'title' => 'Kamar 2',
+                'gambar' => 'img/kamar2.jpg',
+                'price' => '200000',
+                'lokasi' => 'Malang'
+            ]
+        ]
+    ]);
 });
 
 Route::get('/dashboard', function () {
@@ -91,8 +114,6 @@ Route::get('/bookingpage/booking/{slug}', function ($slug) {
     return view('bookingpage/booking', ['title' => 'Booking Page', 'rooms' => $detail]);
 });
 
-
-
 Route::get('/about', function () {
     return view('about', ['nama' => 'Zumar']);
 });
@@ -104,5 +125,3 @@ Route::get('/login', function () {
 Route::get('/register', function () {
     return view('register');
 });
-
-

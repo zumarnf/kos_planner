@@ -12,6 +12,25 @@
 <body class="h-full">
     <x-navbar></x-navbar>
     <main>
+        <div class="flex w-screen h-screen bg-white-green">
+            <div class="flex flex-row w-full h-full">
+                <div class="basis-1/2 flex items-center bg-lg-green">
+                    <div class="flex flex-col mx-20">
+                        <img src="{{ asset('img/kamar4.jpg') }}" class="h-full w-full object-cover rounded-xl">
+                    </div>
+                </div>
+                <div class="basis-1/2 flex flex-col justify-center items-center bg-white-green">
+                    <div class="flex flex-row mx-24 mb-4 text-5xl font-extrabold">
+                        {{ $detail['title'] }}
+                    </div>
+                    <div class="flex flex-row mx-24 mb-4 text-2xl font-medium">
+                        {{ $detail['owner'] }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
         <div class="grid grid-cols-4 ml-16 mr-16">
             @foreach ($rooms as $room)
                 <div class="w-60 h-80 bg-white-green my-8 mx-12 p-3 flex flex-col gap-1 rounded-2xl">
