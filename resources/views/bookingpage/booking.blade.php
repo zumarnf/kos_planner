@@ -18,16 +18,8 @@
         <div class="flex flex-row">
             <div class="basis-1/2 flex flex-col justify-start">
                 <div class="mb-4">
-                    <label for="email" class="block text-grey-gh font-medium mb-2">Email</label>
-                    <input type="email" id="email" placeholder="Email" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
-                </div>
-                <div class="mb-4">
-                    <label for="nama" class="block text-grey-gh font-medium mb-2">Nama</label>
-                    <input type="text" id="nama" placeholder="Nama" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
-                </div>
-                <div class="mb-4">
-                    <label for="nomor" class="block text-grey-gh font-medium mb-2">Nomor HP</label>
-                    <input type="number" id="nomor" placeholder="Nomor HP" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
+                    <label for="nomor" class="block text-grey-gh font-medium mb-2">Berapa Bulan</label>
+                    <input type="number" id="nomor" placeholder="Berapa bulan" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
                 </div>
                 <div class="mb-4">
                     <label for="tanggal" class="block text-grey-gh font-medium mb-2">Tanggal Pemesanan</label>
