@@ -4,7 +4,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home/home', ['home' => [
+    return view('home/home', ['dorms' => [
         [
             'slug' => 'kos-1',
             'title' => 'Kos Angkasa Putih',
