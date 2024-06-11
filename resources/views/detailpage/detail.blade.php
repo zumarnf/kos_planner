@@ -19,10 +19,29 @@
             <div class="basis-1/3 flex flex-col justify-center items-center bg-green-100">
                 <div class="w-full px-20">
                     <div class="text-2xl font-bold">
-                        Kos Angsa Putih
+                        {{ $detail['title'] }}
+                    </div>
+                    <div class="text-lg font-light">
+                        {{ $detail['lokasi'] }}
+                    </div>
+                    <div>
+                        <div class="text-xl font-medium my-5">
+                            Fasilitas
+                        </div>
+                        <ul class="list-disc list-outside ml-4 mb-3">
+                            <li>
+                                Wifi
+                            </li>
+                        </ul>
+                        <div class="text-lg font-light">
+                            {{ $detail['body'] }}
+                        </div>
+                        <div class="text-2xl font-bold">
+                            Harga : {{ $detail['price'] }}
+                        </div>
                     </div>
                     <div class="mb-10">
-                        <x-btn-detail></x-btn-detail>
+                        <x-btn-detail :slug="$detail['slug']"></x-btn-detail>
                     </div>
                 </div>
             </div>

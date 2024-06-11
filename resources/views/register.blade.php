@@ -49,6 +49,18 @@
                         <input type="password" id="password" placeholder="Password" class="w-full py-2 pl-4 pr-12 rounded-md outline-none ring-1 ring-grey-gh">
                     </div>
                     <div class="mb-10">
+                        <div>
+                            <input id="male" class="dark:border-white-400/20 dark:scale-100 transition-all duration-500 ease-in-out dark:hover:scale-110 dark:checked:scale-100 w-6 h-6" type="radio" name="gender">
+                            <label for="male" class="text-black-blue ml-2">Male</label>
+                        </div>
+                        <div>
+                            <input id="female" class="dark:border-white-400/20 dark:scale-100 transition-all duration-500 ease-in-out dark:hover:scale-110 dark:checked:scale-100 w-6 h-6" type="radio" name="gender">
+                            <label for="female" class="text-black-blue ml-2">Female</label>
+                        </div>
+                    </div>
+
+
+                    <div class="mb-10">
                         <button type="submit" class="bg-black-gd w-full py-2 text-white-green my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#78ad87] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0">Register</button>
                     </div>
                     <div class="mb-8 flex justify-center text-center">
