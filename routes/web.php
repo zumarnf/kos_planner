@@ -1,7 +1,7 @@
 <?php
-
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('home/home', ['dorms' => [
@@ -112,6 +112,40 @@ Route::get('/bookingpage/booking/{slug}', function ($slug) {
         return $detail['slug'] == $slug;
     });
     return view('bookingpage/booking', ['title' => 'Booking Page', 'rooms' => $detail]);
+});
+
+Route::post('/bookingpage/booking/{slug}', function (Request $request, $slug) {
+    $rooms = [
+        [
+            'slug' => 'kamar-1',
+            'title' => 'Kamar 1',
+            'price' => '100000',
+        ],
+        [
+            'slug' => 'kamar-2',
+            'title' => 'Kamar 2',
+            'price' => '200000',
+        ]
+    ];
+    $detail = Arr::first($rooms, function ($detail) use ($slug) {
+        return $detail['slug'] == $slug;
+    });
+
+    $bulan = $request->input('bulan');
+    $tanggal = $request->input('tanggal');
+    $totalHarga = $detail['price'] * $bulan;
+
+    return redirect('/tagihan')->with([
+        'title' => 'Tagihan Page',
+        'rooms' => $detail,
+        'bulan' => $bulan,
+        'tanggal' => $tanggal,
+        'totalHarga' => $totalHarga
+    ]);
+});
+
+Route::get('/tagihan', function () {
+    return view('tagihanpage/tagihan');
 });
 
 Route::get('/about', function () {
