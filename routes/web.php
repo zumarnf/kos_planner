@@ -1,38 +1,65 @@
 <?php
+
+
+use App\Http\Controllers\AdminController;
+use Illuminate\Support\Arr;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-Route::get('/', function () {
-    return view('home/home', ['dorms' => [
-        [
-            'slug' => 'kos-1',
-            'title' => 'Kos Angkasa Putih',
-            'gambar' => 'img/kamar.jpg',
-            'lokasi' => 'Surabaya'
-        ],
-        [
-            'slug' => 'kos-2',
-            'title' => 'Kos Angkasa Merah',
-            'gambar' => 'img/kamar2.jpg',
-            'lokasi' => 'Malang'
-        ]
-    ]]);
+Route::middleware(['auth.guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/doLogin', [AuthController::class, 'doLogin'])->name('doLogin');
+    Route::post('/doRegister', [AuthController::class, 'doRegister'])->name('doRegister');
 });
+
+Route::middleware(['auth.token'])->group(function () {
+    Route::post('/doLogout', [AuthController::class, 'doLogout'])->name('doLogout');
+
+    // ! Dashboard Admin
+    Route::middleware(['auth.roles:admin'])->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::post('/handle-approve', [AdminController::class, 'handleApprove'])->name('handleApprove');
+        Route::post('/handle-decline', [AdminController::class, 'handleDecline'])->name('handleDecline');
+        Route::delete('/handle-delete', [AdminController::class, 'handleDelete'])->name('handleDelete');
+    });
+});
+
+
+Route::get('/', function () {
+    return view('home/home', [
+        'dorms' => [
+            [
+                'slug' => 'kos-1',
+                'title' => 'Kos Angkasa Putih',
+                'gambar' => 'img/kamar.jpg',
+                'lokasi' => 'Surabaya'
+            ],
+            [
+                'slug' => 'kos-2',
+                'title' => 'Kos Angkasa Merah',
+                'gambar' => 'img/kamar2.jpg',
+                'lokasi' => 'Malang'
+            ]
+        ]
+    ]);
+})->name('home');
 
 Route::get('detaildorm/detaildorms/{slug}', function ($slug) {
     $dorms = [
         [
             'slug' => 'kos-1',
-            'gambarkos'=>'img/kamar4.jpg',
-            'owner' =>'Bechkam',
+            'gambarkos' => 'img/kamar4.jpg',
+            'owner' => 'Bechkam',
             'title' => 'Kos Angkasa Putih',
         ],
         [
             'slug' => 'kos-2',
-            'gambarkos'=>'img/kamar3.jpg',
-            'owner' =>'Messi',
+            'gambarkos' => 'img/kamar3.jpg',
+            'owner' => 'Messi',
             'title' => 'Kos Angkasa Merah',
         ]
     ];
@@ -63,11 +90,7 @@ Route::get('detaildorm/detaildorms/{slug}', function ($slug) {
             ]
         ]
     ]);
-});
-
-Route::get('/dashboard', function () {
-    return view('adminkos/dashboard');
-});
+})->middleware(['auth.token']);
 
 Route::get('detailpage/detail/{slug}', function ($slug) {
     $rooms = [
@@ -187,12 +210,4 @@ Route::get('/history', function () {
 
 Route::get('/about', function () {
     return view('about', ['nama' => 'Zumar']);
-});
-
-Route::get('/login', function () {
-    return view('login');
-});
-
-Route::get('/register', function () {
-    return view('register');
 });
