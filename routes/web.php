@@ -7,7 +7,6 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 Route::middleware(['auth.guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
