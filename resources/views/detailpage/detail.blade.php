@@ -40,7 +40,7 @@
                             Harga : {{ $detail['price'] }}
                         </div>
                     </div>
-                    <div class="mb-10">
+                    <div class="mb-10 mt-10">
                         <x-btn-detail :slug="$detail['slug']"></x-btn-detail>
                     </div>
                 </div>

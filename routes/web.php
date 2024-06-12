@@ -1,9 +1,13 @@
 <?php
 
+
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Arr;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 Route::middleware(['auth.guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -133,6 +137,76 @@ Route::get('/bookingpage/booking/{slug}', function ($slug) {
     });
     return view('bookingpage/booking', ['title' => 'Booking Page', 'rooms' => $detail]);
 });
+
+Route::post('/bookingpage/booking/{slug}', function (Request $request, $slug) {
+    $rooms = [
+        [
+            'slug' => 'kamar-1',
+            'title' => 'Kamar 1',
+            'price' => '100000',
+            'dorm_slug' => 'kos-1',
+        ],
+        [
+            'slug' => 'kamar-2',
+            'title' => 'Kamar 2',
+            'price' => '200000',
+            'dorm_slug' => 'kos-2',
+        ]
+    ];
+
+    $dorms = [
+        [
+            'slug' => 'kos-1',
+            'kos' => 'Kos Angkasa Putih',
+        ],
+        [
+            'slug' => 'kos-2',
+            'kos' => 'Kos Angkasa Merah',
+        ]
+    ];
+
+    $roomDetail = Arr::first($rooms, function ($detail) use ($slug) {
+        return $detail['slug'] == $slug;
+    });
+
+    $dormDetail = Arr::first($dorms, function ($detail) use ($roomDetail) {
+        return $detail['slug'] == $roomDetail['dorm_slug'];
+    });
+
+    $bulan = $request->input('bulan');
+    $tanggal = $request->input('tanggal');
+    $totalHarga = $roomDetail['price'] * $bulan;
+
+    // Store booking details in the session
+    $history = Session::get('history', []);
+    $history[] = [
+        'kos' => $dormDetail['kos'],
+        'kamar' => $roomDetail['title'],
+        'harga' => $totalHarga,
+        'tanggal' => $tanggal,
+    ];
+    Session::put('history', $history);
+
+    return redirect('/tagihan')->with([
+        'title' => 'Tagihan Page',
+        'rooms' => $roomDetail,
+        'bulan' => $bulan,
+        'tanggal' => $tanggal,
+        'totalHarga' => $totalHarga
+    ]);
+});
+
+Route::get('/tagihan', function () {
+    return view('tagihanpage/tagihan');
+});
+
+Route::get('/history', function () {
+    $history = Session::get('history', []);
+    Session::forget('history'); // Clear the history data from the session
+    return view('historypay/history', ['history' => $history]);
+});
+
+
 
 Route::get('/about', function () {
     return view('about', ['nama' => 'Zumar']);
