@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Arr;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -27,25 +28,7 @@ Route::middleware(['auth.token'])->group(function () {
     });
 });
 
-
-Route::get('/', function () {
-    return view('home/home', [
-        'dorms' => [
-            [
-                'slug' => 'kos-1',
-                'title' => 'Kos Angkasa Putih',
-                'gambar' => 'img/kamar.jpg',
-                'lokasi' => 'Surabaya'
-            ],
-            [
-                'slug' => 'kos-2',
-                'title' => 'Kos Angkasa Merah',
-                'gambar' => 'img/kamar2.jpg',
-                'lokasi' => 'Malang'
-            ]
-        ]
-    ]);
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('detaildorm/detaildorms/{slug}', function ($slug) {
     $dorms = [
@@ -199,6 +182,7 @@ Route::get('/tagihan', function () {
     return view('tagihanpage/tagihan');
 });
 
+// ! Profile
 Route::get('/history', function () {
     $history = Session::get('history', []);
     Session::forget('history'); // Clear the history data from the session
@@ -207,6 +191,8 @@ Route::get('/history', function () {
 
 
 
+
+// ! Dump
 Route::get('/about', function () {
     return view('about', ['nama' => 'Zumar']);
 });

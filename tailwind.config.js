@@ -21,11 +21,11 @@ module.exports = {
                 "grey-gh": "#BBBDBC",
             },
             width: {
-                '128': '32rem', // Add custom width, e.g., 32rem
-                '192': '48rem', // Add custom width, e.g., 48rem
-                '256': '64rem', // Add custom width, e.g., 64rem
-                '512': '90rem',
-              },
+                128: "32rem", // Add custom width, e.g., 32rem
+                192: "48rem", // Add custom width, e.g., 48rem
+                256: "64rem", // Add custom width, e.g., 64rem
+                512: "90rem",
+            },
         },
     },
     plugins: [],
