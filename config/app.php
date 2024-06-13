@@ -54,6 +54,10 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'baseApiUrl' => env('CLOSE_API_BASE_URL'),
+
+    'baseApiImgUrl' => env('CLOSE_API_BASE_IMG_URL'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

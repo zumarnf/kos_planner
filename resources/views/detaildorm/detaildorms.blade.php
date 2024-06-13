@@ -30,7 +30,7 @@
                         Tipe: {{ $detail['tipe'] }}
                     </div>
                     <div class="flex flex-row mx-24 mb-4 text-2xl font-medium">
-                        Kapasitas: {{ $detail['kamar'] }}
+                        Kapasitas: {{ $detail['kapasitas'] }}
                     </div>
                 </div>
             </div>

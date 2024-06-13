@@ -1,45 +1,34 @@
-<!DOCTYPE html>
-<html lang="en" class="h-full bg-gray-100">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @vite('resources/css/app.css')
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <title>Halaman Dorm</title>
-</head>
-<body class="h-full">
-    <x-navbar></x-navbar>
+<x-app-layout>
+    <x-slot:title>Home</x-slot:title>
+
     <main>
         <div class="flex flex-row justify-between">
-            <div class="text-4xl font-extrabold my-8 mx-12">Daftar Kos</div>
-            <div class="my-8 mx-12">
-                <a href="/ownerpage/updatedorm" class="relative my-3 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-black-gd py-2 text-white-green shadow-md transition-all duration-500 ease-in-out before:absolute before:-left-full before:top-0 before:z-[-1] before:h-full before:w-full before:rounded-xl before:bg-gradient-to-r before:from-[#78ad87] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out hover:scale-105 hover:shadow-lg hover:before:left-0 px-10">
-                    Tambah
+            <div class="mx-12 my-8 text-4xl font-extrabold">Daftar Kos</div>
+            <div class="mx-12 my-8">
+                <a href="/ownerpage/updatedorm"
+                    class="relative my-3 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-black-gd px-10 py-2 text-white-green shadow-md transition-all duration-500 ease-in-out before:absolute before:-left-full before:top-0 before:z-[-1] before:h-full before:w-full before:rounded-xl before:bg-gradient-to-r before:from-[#78ad87] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out hover:scale-105 hover:shadow-lg hover:before:left-0">
+                    Tambah Kos Baru
                 </a>
             </div>
         </div>
 
-        <div class="grid grid-cols-4 ml-10 mr-10">
+        <div class="ml-10 mr-10 grid grid-cols-4">
             @foreach ($dorms as $dorm)
-                <div class="w-60 h-80 bg-white-green my-8 mx-12 p-3 flex flex-col gap-1 rounded-2xl">
+                <div class="mx-12 my-8 flex h-80 w-60 flex-col gap-1 rounded-2xl bg-white-green p-3">
                     <div class="h-48 rounded-xl">
-                        <img src="{{ asset($dorm['gambar']) }}" class="h-full w-full object-cover rounded-xl">
+                        <img src="{{ config('app.baseApiImgUrl') . $dorm['images'] }}" class="h-full w-full rounded-xl object-cover">
                     </div>
                     <div class="flex flex-col gap-4">
                         <div class="flex flex-row justify-between">
                             <div class="flex flex-col">
-                                <span class="text-xl font-bold text-black-blue">{{ $dorm['title'] }}</span>
-                                <p class="text-xs text-gray-700">{{ $dorm['lokasi'] }}</p>
+                                <span class="text-xl font-bold text-black-blue">{{ $dorm['name'] }}</span>
+                                <p class="text-xs text-gray-700">{{ $dorm['address'] }}</p>
                             </div>
-                            <span class="font-bold text-red-600">{{ $dorm['lokasi'] }}</span>
                         </div>
-                        <a href="/ownerroom/{{ $dorm['slug'] }}" class="hover:bg-green-gd text-gray-50 bg-black-blue py-2 rounded-md text-center">Detail</a>
+                        <a href="/ownerroom/{{ $dorm['id'] }}" class="rounded-md bg-black-blue py-2 text-center text-gray-50 hover:bg-green-gd">Detail</a>
                     </div>
                 </div>
             @endforeach
         </div>
     </main>
-</body>
-</html>
+</x-app-layout>

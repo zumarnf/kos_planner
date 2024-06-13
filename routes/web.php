@@ -26,6 +26,124 @@ Route::middleware(['auth.token'])->group(function () {
         Route::post('/handle-decline', [AdminController::class, 'handleDecline'])->name('handleDecline');
         Route::delete('/handle-delete', [AdminController::class, 'handleDelete'])->name('handleDelete');
     });
+
+    // ! Owners
+    Route::middleware(['auth.roles:owner'])->group(function () {
+        Route::get('/owner/dorms', function () {
+            $getDorms = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/' . session('authUser')['id']);
+
+            return view('pages.owner.list-kost', [
+                'dorms' => $getDorms->json(),
+            ]);
+        })->name('owner.list.dorms');
+
+        // Detail Dorm
+        Route::get('/owner/dorm/{id}', function ($id) {
+            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/detail/' . $id);
+
+            $rooms = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/rooms/' . $id);
+
+            // dd($dormDetail->json(), $rooms->json());
+
+            return view('pages.dorms.detail', [
+                'dormDetail' => $dormDetail->json(),
+                'rooms' => $rooms->json(),
+            ]);
+        })->name('owner.detail.dorms');
+
+        Route::get('/owner/dorms/create', function () {
+            return view('pages.owner.dorms.create');
+        })->name('owner.create.dorms');
+
+        Route::post('/owner/dorms/store', function (Request $request) {
+            $request->validate([
+                'name' => ['required', 'string'],
+                'capacity' => ['required', 'integer'],
+                'type' => ['required', 'in:male,female,mixed'],
+                'longtitude' => ['required'],
+                'latitude' => ['required'],
+                'images' => ['required', 'image'],
+                'address' => ['required'],
+                'description' => ['required'],
+            ]);
+
+            $img = [
+                'name' => 'images',
+                'filename' => $request->file('images')->getClientOriginalName(),
+            ];
+
+            $response = Http::withToken(session('auth_token'))
+                ->attach($img['name'], file_get_contents($request->file('images')), $img['filename'])
+                ->post(config('app.baseApiUrl') . '/owner/dorms/' . session('authUser')['id'], [
+                    'name' => $request->input('name'),
+                    'address' => $request->input('address'),
+                    'longtitude' => $request->input('longtitude'),
+                    'latitude' => $request->input('latitude'),
+                    'capacity' => $request->input('capacity'),
+                    'type' => $request->input('type'),
+                    'description' => $request->input('description'),
+                ]);
+
+            return redirect()->route('owner.list.dorms')->with('status', (object) $response->json());
+        })->name('owner.store.dorms');
+
+        Route::get('/owner/dorms/edit/{id}', function ($id) {
+            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/detail/' . $id);
+
+            return view('pages.owner.dorms.edit', [
+                'dormDetail' => $dormDetail,
+            ]);
+        })->name('owner.edit.dorms');
+
+        Route::put('/owner/dorms/update', function (Request $request) {
+            $request->validate([
+                'name' => ['required', 'string'],
+                'capacity' => ['required', 'integer'],
+                'type' => ['required', 'in:male,female,mixed'],
+                'longtitude' => ['required'],
+                'latitude' => ['required'],
+                'images' => ['image'],
+                'address' => ['required'],
+                'description' => ['required'],
+            ]);
+
+            $response = Http::withToken(session('auth_token'));
+
+            $img = [
+                'name' => 'images',
+                'filename' => $request->file('images')->getClientOriginalName(),
+            ];
+
+            // if ($request->hasFile('images')) {
+            //     $img = [
+            //         'name' => 'images',
+            //         'filename' => $request->file('images')->getClientOriginalName(),
+            //     ];
+
+            //     $response->attach('images', file_get_contents($request->file('images')), $img['filename']);
+            // }
+
+            $results = $response->attach('images', fopen($request->file('images'), 'r'), $img['filename'], ['Content-Type' => 'image/jpeg'])->post(config('app.baseApiUrl') . '/owner/dorms/' . session('authUser')['id'] . '/edit/' . $request->input('id'), [
+                'name' => $request->input('name'),
+                'address' => $request->input('address'),
+                'longtitude' => $request->input('longtitude'),
+                'latitude' => $request->input('latitude'),
+                'capacity' => $request->input('capacity'),
+                'type' => $request->input('type'),
+                'description' => $request->input('description'),
+            ]);
+
+            dd($results->json());
+
+            return redirect()->route('owner.list.dorms')->with('status', (object) $results->json());
+        })->name('owner.update.dorms');
+
+        Route::delete('/owner/dorm/{id}', function ($id) {
+            $deletedDorm = Http::withToken(session('auth_token'))->delete(config('app.baseApiUrl') . '/owner/dorms/' . $id);
+
+            return redirect()->route('owner.list.dorms')->with('status', (object) $deletedDorm->json());
+        })->name('owner.delete.dorms');
+    });
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -186,71 +304,57 @@ Route::get('/tagihan', function () {
     return view('tagihanpage/tagihan');
 });
 
-Route::get('/owner', function () {
-    $dorms = [
-        [
-            'slug' => 'kos-1',
-            'title' => 'Kos Angkasa Putih',
-            'gambar' => 'img/kamar.jpg',
-            'lokasi' => 'Surabaya'
-        ],
-        [
-            'slug' => 'kos-2',
-            'title' => 'Kos Angkasa Merah',
-            'gambar' => 'img/kamar2.jpg',
-            'lokasi' => 'Malang'
-        ]
-    ];
-    return view('ownerpage.owner', ['dorms' => $dorms]);
-});
 
-Route::get('/ownerroom/{slug}', function ($slug) {
-    $dorms = [
-        [
-            'slug' => 'kos-1',
-            'title' => 'Kos Angkasa Putih',
-            'gambar' => 'img/kamar.jpg',
-            'lokasi' => 'Surabaya',
-            'tipe' => 'female',
-            'kapasitas' => '6'
-        ],
-        [
-            'slug' => 'kos-2',
-            'title' => 'Kos Angkasa Merah',
-            'gambar' => 'img/kamar2.jpg',
-            'lokasi' => 'Malang',
-            'tipe' => 'female',
-            'kapasitas' => '6'
-        ]
-    ];
 
-    $rooms = [
-        [
-            'slug' => 'kamar-1',
-            'gambarkos' => 'img/kamar4.jpg',
-            'owner' => 'Bechkam',
-            'title' => 'Kamar 1',
-            'gambar' => 'img/kamar.jpg',
-            'price' => '100000',
-            'lokasi' => 'Surabaya'
-        ],
-        [
-            'slug' => 'kamar-2',
-            'gambarkos' => 'img/kamar3.jpg',
-            'owner' => 'Messi',
-            'title' => 'Kamar 2',
-            'gambar' => 'img/kamar2.jpg',
-            'price' => '200000',
-            'lokasi' => 'Malang'
-        ]
-    ];
 
-    $drooms = Arr::first($dorms, function ($droom) use ($slug) {
-        return $droom['slug'] == $slug;
-    });
 
-    return view('ownerpage/ownerroom', ['drooms' => $drooms, 'rooms' => $rooms]);
-});
+// Route::get('/owner/rooms/{slug}', function ($slug) {
+//     $dorms = [
+//         [
+//             'slug' => 'kos-1',
+//             'title' => 'Kos Angkasa Putih',
+//             'gambar' => 'img/kamar.jpg',
+//             'lokasi' => 'Surabaya',
+//             'tipe' => 'female',
+//             'kapasitas' => '6'
+//         ],
+//         [
+//             'slug' => 'kos-2',
+//             'title' => 'Kos Angkasa Merah',
+//             'gambar' => 'img/kamar2.jpg',
+//             'lokasi' => 'Malang',
+//             'tipe' => 'female',
+//             'kapasitas' => '6'
+//         ]
+//     ];
+
+//     $rooms = [
+//         [
+//             'slug' => 'kamar-1',
+//             'gambarkos' => 'img/kamar4.jpg',
+//             'owner' => 'Bechkam',
+//             'title' => 'Kamar 1',
+//             'gambar' => 'img/kamar.jpg',
+//             'price' => '100000',
+//             'lokasi' => 'Surabaya'
+//         ],
+//         [
+//             'slug' => 'kamar-2',
+//             'gambarkos' => 'img/kamar3.jpg',
+//             'owner' => 'Messi',
+//             'title' => 'Kamar 2',
+//             'gambar' => 'img/kamar2.jpg',
+//             'price' => '200000',
+//             'lokasi' => 'Malang'
+//         ]
+//     ];
+
+//     $drooms = Arr::first($dorms, function ($droom) use ($slug) {
+//         return $droom['slug'] == $slug;
+//     });
+
+//     return view('ownerpage/ownerroom', ['drooms' => $drooms, 'rooms' => $rooms]);
+// })->name('owner.rooms');
 
 Route::get('/ownerpage/updatedorm', function () {
     return view('ownerpage/updatedorm');
