@@ -9,7 +9,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $response = Http::withToken(session('auth_token'))->get('http://server.test/api/v1/admin/owners');
+        $response = Http::withToken(session('auth_token'))->get('http://127.0.0.1:3000/api/v1/admin/owners');
 
         // dd($response->json());
 
@@ -23,7 +23,7 @@ class AdminController extends Controller
     {
         $id = $request->input('id');
 
-        $response = Http::withToken(session('auth_token'))->patch('http://server.test/api/v1/admin/owner-approve/' . $id);
+        $response = Http::withToken(session('auth_token'))->patch('http://127.0.0.1:3000/api/v1/admin/owner-approve/' . $id);
 
         // dd($response->json());
 
@@ -34,7 +34,7 @@ class AdminController extends Controller
     {
         $id = $request->input('id');
 
-        $response = Http::withToken(session('auth_token'))->patch('http://server.test/api/v1/admin/owner-decline/' . $id);
+        $response = Http::withToken(session('auth_token'))->patch('http://127.0.0.1:3000/api/v1/admin/owner-decline/' . $id);
 
         return redirect()->back()->with('status', (object) $response->json());
     }
@@ -45,7 +45,7 @@ class AdminController extends Controller
 
         // dd($id);
 
-        $response = Http::withToken(session('auth_token'))->delete('http://server.test/api/v1/admin/owner/' . $id);
+        $response = Http::withToken(session('auth_token'))->delete('http://127.0.0.1:3000/api/v1/admin/owner/' . $id);
 
         return redirect()->back()->with('status', (object) $response->json());
     }

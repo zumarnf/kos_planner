@@ -37,12 +37,16 @@ Route::get('detaildorm/detaildorms/{slug}', function ($slug) {
             'gambarkos' => 'img/kamar4.jpg',
             'owner' => 'Bechkam',
             'title' => 'Kos Angkasa Putih',
+            'tipe' => 'Putra',
+            'kapasitas' => '3',
         ],
         [
             'slug' => 'kos-2',
             'gambarkos' => 'img/kamar3.jpg',
             'owner' => 'Messi',
             'title' => 'Kos Angkasa Merah',
+            'tipe' => 'Putra',
+            'kapasitas' => '3',
         ]
     ];
     $detail = Arr::first($dorms, function ($detail) use ($slug) {
@@ -180,6 +184,80 @@ Route::post('/bookingpage/booking/{slug}', function (Request $request, $slug) {
 
 Route::get('/tagihan', function () {
     return view('tagihanpage/tagihan');
+});
+
+Route::get('/owner', function () {
+    $dorms = [
+        [
+            'slug' => 'kos-1',
+            'title' => 'Kos Angkasa Putih',
+            'gambar' => 'img/kamar.jpg',
+            'lokasi' => 'Surabaya'
+        ],
+        [
+            'slug' => 'kos-2',
+            'title' => 'Kos Angkasa Merah',
+            'gambar' => 'img/kamar2.jpg',
+            'lokasi' => 'Malang'
+        ]
+    ];
+    return view('ownerpage.owner', ['dorms' => $dorms]);
+});
+
+Route::get('/ownerroom/{slug}', function ($slug) {
+    $dorms = [
+        [
+            'slug' => 'kos-1',
+            'title' => 'Kos Angkasa Putih',
+            'gambar' => 'img/kamar.jpg',
+            'lokasi' => 'Surabaya',
+            'tipe' => 'female',
+            'kapasitas' => '6'
+        ],
+        [
+            'slug' => 'kos-2',
+            'title' => 'Kos Angkasa Merah',
+            'gambar' => 'img/kamar2.jpg',
+            'lokasi' => 'Malang',
+            'tipe' => 'female',
+            'kapasitas' => '6'
+        ]
+    ];
+
+    $rooms = [
+        [
+            'slug' => 'kamar-1',
+            'gambarkos' => 'img/kamar4.jpg',
+            'owner' => 'Bechkam',
+            'title' => 'Kamar 1',
+            'gambar' => 'img/kamar.jpg',
+            'price' => '100000',
+            'lokasi' => 'Surabaya'
+        ],
+        [
+            'slug' => 'kamar-2',
+            'gambarkos' => 'img/kamar3.jpg',
+            'owner' => 'Messi',
+            'title' => 'Kamar 2',
+            'gambar' => 'img/kamar2.jpg',
+            'price' => '200000',
+            'lokasi' => 'Malang'
+        ]
+    ];
+
+    $drooms = Arr::first($dorms, function ($droom) use ($slug) {
+        return $droom['slug'] == $slug;
+    });
+
+    return view('ownerpage/ownerroom', ['drooms' => $drooms, 'rooms' => $rooms]);
+});
+
+Route::get('/ownerpage/updatedorm', function () {
+    return view('ownerpage/updatedorm');
+});
+
+Route::get('/ownerpage/updateroom', function () {
+    return view('ownerpage/updateroom');
 });
 
 // ! Profile
