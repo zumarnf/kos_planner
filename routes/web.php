@@ -29,6 +29,7 @@ Route::middleware(['auth.token'])->group(function () {
 
     // ! Owners
     Route::middleware(['auth.roles:owner'])->group(function () {
+        // ? Get list of Dorms base on Owner
         Route::get('/owner/dorms', function () {
             $getDorms = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/' . session('authUser')['id']);
 
@@ -37,7 +38,7 @@ Route::middleware(['auth.token'])->group(function () {
             ]);
         })->name('owner.list.dorms');
 
-        // Detail Dorm
+        // ? Detail Dorm & List Kamar
         Route::get('/owner/dorm/{id}', function ($id) {
             $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/detail/' . $id);
 
@@ -51,11 +52,14 @@ Route::middleware(['auth.token'])->group(function () {
             ]);
         })->name('owner.detail.dorms');
 
+        // ? Show Create Dorms Form
         Route::get('/owner/dorms/create', function () {
             return view('pages.owner.dorms.create');
         })->name('owner.create.dorms');
 
+        // ? Store Created Data to Database
         Route::post('/owner/dorms/store', function (Request $request) {
+            // dd($request->input());
             $request->validate([
                 'name' => ['required', 'string'],
                 'capacity' => ['required', 'integer'],
@@ -87,6 +91,7 @@ Route::middleware(['auth.token'])->group(function () {
             return redirect()->route('owner.list.dorms')->with('status', (object) $response->json());
         })->name('owner.store.dorms');
 
+        // ? Show Edit Dorms Form
         Route::get('/owner/dorms/edit/{id}', function ($id) {
             $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/detail/' . $id);
 
@@ -95,6 +100,7 @@ Route::middleware(['auth.token'])->group(function () {
             ]);
         })->name('owner.edit.dorms');
 
+        // ? Update Edited Data to Database
         Route::put('/owner/dorms/update', function (Request $request) {
             $request->validate([
                 'name' => ['required', 'string'],
@@ -109,21 +115,16 @@ Route::middleware(['auth.token'])->group(function () {
 
             $response = Http::withToken(session('auth_token'));
 
-            $img = [
-                'name' => 'images',
-                'filename' => $request->file('images')->getClientOriginalName(),
-            ];
+            if ($request->hasFile('images')) {
+                $img = [
+                    'name' => 'images',
+                    'filename' => $request->file('images')->getClientOriginalName(),
+                ];
 
-            // if ($request->hasFile('images')) {
-            //     $img = [
-            //         'name' => 'images',
-            //         'filename' => $request->file('images')->getClientOriginalName(),
-            //     ];
+                $response->attach('images', file_get_contents($request->file('images')), $img['filename']);
+            }
 
-            //     $response->attach('images', file_get_contents($request->file('images')), $img['filename']);
-            // }
-
-            $results = $response->attach('images', fopen($request->file('images'), 'r'), $img['filename'], ['Content-Type' => 'image/jpeg'])->post(config('app.baseApiUrl') . '/owner/dorms/' . session('authUser')['id'] . '/edit/' . $request->input('id'), [
+            $results = $response->post(config('app.baseApiUrl') . '/owner/dorms/' . session('authUser')['id'] . '/edit/' . $request->input('id'), [
                 'name' => $request->input('name'),
                 'address' => $request->input('address'),
                 'longtitude' => $request->input('longtitude'),
@@ -133,16 +134,69 @@ Route::middleware(['auth.token'])->group(function () {
                 'description' => $request->input('description'),
             ]);
 
-            dd($results->json());
+            // dd($results->json());
 
             return redirect()->route('owner.list.dorms')->with('status', (object) $results->json());
         })->name('owner.update.dorms');
 
+        // ? Delete Dorms From Database
         Route::delete('/owner/dorm/{id}', function ($id) {
             $deletedDorm = Http::withToken(session('auth_token'))->delete(config('app.baseApiUrl') . '/owner/dorms/' . $id);
 
             return redirect()->route('owner.list.dorms')->with('status', (object) $deletedDorm->json());
         })->name('owner.delete.dorms');
+
+        // !!!!!!!!!!!!!!!!!!!! Rooms
+
+        Route::get('/owner/rooms/{id}', function ($id) {
+            $room = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/rooms/detail/' . $id);
+
+            // dd($room);
+
+            return view('pages.rooms.detail', [
+                'detaiLRoom' => $room->json(),
+            ]);
+        })->name('owner.detail.rooms');
+
+        Route::get('/owner/rooms/create', function (Request $request) {
+            $dorm_id = $request->input('id');
+
+            return view('pages.owner.rooms.create', [
+                'dorm_id' => $dorm_id,
+            ]);
+        })->name('owner.create.rooms');
+
+        Route::post('/owner/rooms/store', function (Request $request) {
+            $request->validate([
+                'room_number' => ['required', 'string'],
+                'room_type' => ['required', 'string'],
+                'available' => ['required'],
+                'facilities' => ['required'],
+                'price' => ['required'],
+                'images' => ['required', 'image'],
+                'description' => ['required'],
+            ]);
+
+            $img = [
+                'name' => 'images',
+                'filename' => $request->file('images')->getClientOriginalName(),
+            ];
+
+            $response = Http::withToken(session('auth_token'))
+                ->attach($img['name'], file_get_contents($request->file('images')), $img['filename'])
+                ->post(config('app.baseApiUrl') . '/owner/rooms/' . $request->input('dorm_id'), [
+                    'room_number' => $request->input('room_number'),
+                    'room_type' => $request->input('room_type'),
+                    'available' => $request->input('available'),
+                    'facilities' => $request->input('facilities'),
+                    'price' => $request->input('price'),
+                    'description' => $request->input('description'),
+                ]);
+
+            // dd($response);
+
+            return redirect()->route('owner.list.dorms')->with('status', (object) $response->json());
+        })->name('owner.store.rooms');
     });
 });
 

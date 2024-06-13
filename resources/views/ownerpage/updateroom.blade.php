@@ -18,8 +18,6 @@
     <main>
         <div class="bg-lg-green w-96 mx-auto h-auto border-2 border-grey-gd rounded-xl p-8 m-4">
             <form action="#" method="#">
-
-
                 <div class="flex flex-col justify-start">
                     <div class="mb-4">
                         <label for="nomor" class="block text-grey-gh font-medium mb-2">Nomor Kamar</label>

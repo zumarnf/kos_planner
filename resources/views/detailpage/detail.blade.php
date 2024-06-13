@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-gray-100">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +10,15 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <title>Halaman Home</title>
 </head>
-<body class="h-full flex flex-col">
+
+<body class="flex h-full flex-col">
 
     <x-navbar></x-navbar>
 
     <main class="flex-grow">
-        <div class="flex flex-row w-full h-full">
-           <x-galery></x-galery>
-            <div class="basis-1/3 flex flex-col justify-center items-center bg-green-100">
+        <div class="flex h-full w-full flex-row">
+            <x-galery></x-galery>
+            <div class="flex basis-1/3 flex-col items-center justify-center bg-green-100">
                 <div class="w-full px-20">
                     <div class="text-2xl font-bold">
                         {{ $detail['title'] }}
@@ -25,10 +27,10 @@
                         {{ $detail['lokasi'] }}
                     </div>
                     <div>
-                        <div class="text-xl font-medium my-5">
+                        <div class="my-5 text-xl font-medium">
                             Fasilitas
                         </div>
-                        <ul class="list-disc list-outside ml-4 mb-3">
+                        <ul class="mb-3 ml-4 list-outside list-disc">
                             <li>
                                 Wifi
                             </li>
@@ -55,4 +57,5 @@
 
     </main>
 </body>
+
 </html>
