@@ -33,7 +33,7 @@
                     </div>
                     @if (Session::get('authUser')['role'] != 'owner')
                         <div class="mb-10 mt-10">
-                            <a href="/bookingpage/booking"
+                            <a href="{{ route('client.booking', ['id' => $detaiLRoom['id']]) }}"
                                 class="relative my-3 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-black-gd py-2 text-white-green shadow-md transition-all duration-500 ease-in-out before:absolute before:-left-full before:top-0 before:z-[-1] before:h-full before:w-full before:rounded-xl before:bg-gradient-to-r before:from-[#78ad87] before:to-[rgb(105,184,141)] before:transition-all before:duration-500 before:ease-in-out hover:scale-105 hover:shadow-lg hover:before:left-0">
                                 Book Now
                             </a>

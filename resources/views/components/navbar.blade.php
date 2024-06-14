@@ -48,12 +48,22 @@
                                 {{-- Owner --}}
                                 @if (Session::get('authUser')['role'] == 'owner')
                                     {{-- List Kost --}}
-                                    <a href="{{ route('owner.list.dorms') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">
+                                    <a href="{{ route('owner.list.dorms') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
+                                        id="user-menu-item-0">
                                         List Kost
                                     </a>
                                     {{-- Riwayat Penghuni --}}
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">
                                         Riwayat Penghuni
+                                    </a>
+                                @endif
+
+                                {{-- Owner --}}
+                                @if (Session::get('authUser')['role'] == 'client')
+                                    {{-- List Kost --}}
+                                    <a href="{{ route('client.profile') }}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
+                                        id="user-menu-item-0">
+                                        Profile
                                     </a>
                                 @endif
 

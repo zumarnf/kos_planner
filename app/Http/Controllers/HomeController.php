@@ -3,28 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $dorms = [
-            [
-                'slug' => 'kos-1',
-                'title' => 'Kos Angkasa Putih',
-                'gambar' => 'img/kamar.jpg',
-                'lokasi' => 'Surabaya'
-            ],
-            [
-                'slug' => 'kos-2',
-                'title' => 'Kos Angkasa Merah',
-                'gambar' => 'img/kamar2.jpg',
-                'lokasi' => 'Malang'
-            ]
-        ];
+        $allDorms = Http::get(config('app.baseApiUrl') . '/allDorms');
 
         return view('pages.home.index', [
-            'dorms' => $dorms
+            'dorms' => $allDorms->json()
         ]);
     }
 }

@@ -19,17 +19,19 @@
             @foreach ($dorms as $dorm)
                 <div class="mx-12 my-8 flex h-80 w-60 flex-col gap-1 rounded-2xl bg-white-green p-3">
                     <div class="h-48 rounded-xl">
-                        <img src="{{ asset('img/kamar.jpg') }}" class="h-full w-full rounded-xl object-cover">
+                        <img src="{{ config('app.baseApiImgUrl') . $dorm['images'] }}" class="h-full w-full rounded-xl object-cover">
                     </div>
                     <div class="flex flex-col gap-4">
                         <div class="flex flex-row justify-between">
                             <div class="flex flex-col">
-                                <span class="text-xl font-bold text-black-blue">{{ $dorm['title'] }}</span>
-                                <p class="text-xs text-gray-700">{{ $dorm['lokasi'] }}</p>
+                                <span class="text-xl font-bold text-black-blue">{{ $dorm['name'] }}</span>
+                                <p class="text-xs text-gray-700">{{ $dorm['address'] }}</p>
                             </div>
                         </div>
-                        <a href="detaildorm/detaildorms/{{ $dorm['slug'] }}"
-                            class="rounded-md bg-black-blue py-2 text-center text-gray-50 hover:bg-green-gd">Detail</a>
+                        <a href="{{ route('client.detail.dorms', ['id' => $dorm['id']]) }}"
+                            class="rounded-md bg-black-blue py-2 text-center text-gray-50 hover:bg-green-gd">
+                            Detail
+                        </a>
                     </div>
                 </div>
             @endforeach

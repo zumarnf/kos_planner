@@ -31,7 +31,9 @@ Route::middleware(['auth.token'])->group(function () {
     Route::middleware(['auth.roles:owner'])->group(function () {
         // ? Get list of Dorms base on Owner
         Route::get('/owner/dorms', function () {
-            $getDorms = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/' . session('authUser')['id']);
+            $getDorms = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/dorms/' . session('authUser')['id']);
+
+            // dd($getDorms);
 
             return view('pages.owner.list-kost', [
                 'dorms' => $getDorms->json(),
@@ -40,9 +42,9 @@ Route::middleware(['auth.token'])->group(function () {
 
         // ? Detail Dorm & List Kamar
         Route::get('/owner/dorm/{id}', function ($id) {
-            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/detail/' . $id);
+            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/dorms/detail/' . $id);
 
-            $rooms = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/rooms/' . $id);
+            $rooms = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/rooms/' . $id);
 
             // dd($dormDetail->json(), $rooms->json());
 
@@ -93,7 +95,7 @@ Route::middleware(['auth.token'])->group(function () {
 
         // ? Show Edit Dorms Form
         Route::get('/owner/dorms/edit/{id}', function ($id) {
-            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/dorms/detail/' . $id);
+            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/dorms/detail/' . $id);
 
             return view('pages.owner.dorms.edit', [
                 'dormDetail' => $dormDetail,
@@ -147,9 +149,9 @@ Route::middleware(['auth.token'])->group(function () {
         })->name('owner.delete.dorms');
 
         // !!!!!!!!!!!!!!!!!!!! Rooms
-
+        // ? Detail Kamar
         Route::get('/owner/rooms/{id}', function ($id) {
-            $room = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/owner/rooms/detail/' . $id);
+            $room = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/rooms/detail/' . $id);
 
             // dd($room);
 
@@ -158,7 +160,8 @@ Route::middleware(['auth.token'])->group(function () {
             ]);
         })->name('owner.detail.rooms');
 
-        Route::get('/owner/rooms/create', function (Request $request) {
+        // ? Show Create kamar Form
+        Route::get('/owner/room/create', function (Request $request) {
             $dorm_id = $request->input('id');
 
             return view('pages.owner.rooms.create', [
@@ -166,6 +169,7 @@ Route::middleware(['auth.token'])->group(function () {
             ]);
         })->name('owner.create.rooms');
 
+        // ? Store Created kamar to Database
         Route::post('/owner/rooms/store', function (Request $request) {
             $request->validate([
                 'room_number' => ['required', 'string'],
@@ -198,169 +202,171 @@ Route::middleware(['auth.token'])->group(function () {
             return redirect()->route('owner.list.dorms')->with('status', (object) $response->json());
         })->name('owner.store.rooms');
     });
+
+    // ! Client
+    Route::middleware(['auth.roles:client'])->group(function () {
+        // ? Detail Dorm & List Kamar
+        Route::get('/client/dorm/{id}', function ($id) {
+            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/dorms/detail/' . $id);
+
+            $rooms = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/rooms/' . $id);
+
+            return view('pages.dorms.detail', [
+                'dormDetail' => $dormDetail->json(),
+                'rooms' => $rooms->json(),
+            ]);
+        })->name('client.detail.dorms');
+
+        // ? Detail Kamar
+        Route::get('/client/rooms/{id}', function ($id) {
+            $room = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/rooms/detail/' . $id);
+
+            // dd($room);
+
+            return view('pages.rooms.detail', [
+                'detaiLRoom' => $room->json(),
+            ]);
+        })->name('client.detail.rooms');
+
+        // ? Booking Page
+        Route::get('/client/booking/{id}', function ($id) {
+            $room = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/rooms/detail/' . $id);
+
+            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/dorms/detail/' . $room->json()['dorm_id']);
+
+            $dormOwner = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/client/dorm/owner/' . $room->json()['dorm_id']);
+
+            // dd($dormDetail->json(), $room->json(), $dormOwner->json());
+
+            return view('pages.client.booking.index', [
+                'dormOwner' => $dormOwner->json(),
+                'dormDetail' => $dormDetail->json(),
+                'room' => $room,
+            ]);
+        })->name('client.booking');
+
+        // ? Invoice Page
+        Route::post('/client/invoice', function (Request $request) {
+            $request->validate([
+                'total_month' => ['required', 'integer', 'between:1,12'],
+                'check_in_date' => ['required']
+            ]);
+
+            $id = $request->input('id');
+
+            $room = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/rooms/detail/' . $id);
+
+            $dormDetail = Http::withToken(session('auth_token'))->get(config('app.baseApiUrl') . '/dorms/detail/' . $room->json()['dorm_id']);
+
+            $bulan = $request->input('total_month');
+            $tanggal = $request->input('check_in_date');
+            $totalHarga = $room->json()['price'] * $bulan;
+
+            return view('pages.client.invoice.index', [
+                'dorm' => $dormDetail->json(),
+                'room' => $room->json(),
+                'price' => $totalHarga,
+                'startDate' => $tanggal,
+                'month' => $bulan,
+            ]);
+        })->name('client.invoice');
+
+        // ? Profile Page
+        Route::get('/client/profile', function () {
+            $authUser = session('authUser');
+
+            return view('pages.client.profile.index', [
+                'user' => $authUser,
+            ]);
+        })->name('client.profile');
+
+        // ? Register as Owner
+        Route::patch('/client/register-owner', function () {
+            $response = Http::withToken(session('auth_token'))->patch(config('app.baseApiUrl') . '/client/register-owner');
+
+            // dd($response);
+
+            return redirect()->back()->with('status', (object) $response->json());
+        })->name('client.register.owner');
+    });
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('detaildorm/detaildorms/{slug}', function ($slug) {
-    $dorms = [
-        [
-            'slug' => 'kos-1',
-            'gambarkos' => 'img/kamar4.jpg',
-            'owner' => 'Bechkam',
-            'title' => 'Kos Angkasa Putih',
-            'tipe' => 'Putra',
-            'kapasitas' => '3',
-        ],
-        [
-            'slug' => 'kos-2',
-            'gambarkos' => 'img/kamar3.jpg',
-            'owner' => 'Messi',
-            'title' => 'Kos Angkasa Merah',
-            'tipe' => 'Putra',
-            'kapasitas' => '3',
-        ]
-    ];
-    $detail = Arr::first($dorms, function ($detail) use ($slug) {
-        return $detail['slug'] == $slug;
-    });
-    return view('detaildorm/detaildorms', [
-        'title' => 'Dorm',
-        'detail' => $detail,
-        'rooms' => [
-            [
-                'slug' => 'kamar-1',
-                'gambarkos' => 'img/kamar4.jpg',
-                'owner' => 'Bechkam',
-                'title' => 'Kamar 1',
-                'gambar' => 'img/kamar.jpg',
-                'price' => '100000',
-                'lokasi' => 'Surabaya'
-            ],
-            [
-                'slug' => 'kamar-2',
-                'gambarkos' => 'img/kamar3.jpg',
-                'owner' => 'Messi',
-                'title' => 'Kamar 2',
-                'gambar' => 'img/kamar2.jpg',
-                'price' => '200000',
-                'lokasi' => 'Malang'
-            ]
-        ]
-    ]);
-})->middleware(['auth.token']);
+// Route::get('detaildorm/detaildorms/{slug}', function ($slug) {
+//     $dorms = [
+//         [
+//             'slug' => 'kos-1',
+//             'gambarkos' => 'img/kamar4.jpg',
+//             'owner' => 'Bechkam',
+//             'title' => 'Kos Angkasa Putih',
+//             'tipe' => 'Putra',
+//             'kapasitas' => '3',
+//         ],
+//         [
+//             'slug' => 'kos-2',
+//             'gambarkos' => 'img/kamar3.jpg',
+//             'owner' => 'Messi',
+//             'title' => 'Kos Angkasa Merah',
+//             'tipe' => 'Putra',
+//             'kapasitas' => '3',
+//         ]
+//     ];
+//     $detail = Arr::first($dorms, function ($detail) use ($slug) {
+//         return $detail['slug'] == $slug;
+//     });
+//     return view('detaildorm/detaildorms', [
+//         'title' => 'Dorm',
+//         'detail' => $detail,
+//         'rooms' => [
+//             [
+//                 'slug' => 'kamar-1',
+//                 'gambarkos' => 'img/kamar4.jpg',
+//                 'owner' => 'Bechkam',
+//                 'title' => 'Kamar 1',
+//                 'gambar' => 'img/kamar.jpg',
+//                 'price' => '100000',
+//                 'lokasi' => 'Surabaya'
+//             ],
+//             [
+//                 'slug' => 'kamar-2',
+//                 'gambarkos' => 'img/kamar3.jpg',
+//                 'owner' => 'Messi',
+//                 'title' => 'Kamar 2',
+//                 'gambar' => 'img/kamar2.jpg',
+//                 'price' => '200000',
+//                 'lokasi' => 'Malang'
+//             ]
+//         ]
+//     ]);
+// })->middleware(['auth.token']);
 
-Route::get('detailpage/detail/{slug}', function ($slug) {
-    $rooms = [
-        [
-            'slug' => 'kamar-1',
-            'title' => 'Kamar 1',
-            'gambar' => 'img/kamar.jpg',
-            'price' => '100000',
-            'lokasi' => 'Surabaya',
-            'fasilitas' => [],
-            'body' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos et cupiditate soluta explicabo sapiente quaerat odio recusandae omnis nesciunt optio libero, quasi quia possimus, expedita quos iusto quibusdam quae nobis.'
-        ],
-        [
-            'slug' => 'kamar-2',
-            'title' => 'kamar 2',
-            'gambar' => 'img/kamar2.jpg',
-            'price' => '200000',
-            'lokasi' => 'Malang',
-            'fasilitas' => [],
-            'body' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos et cupiditate soluta explicabo sapiente quaerat odio recusandae omnis nesciunt optio libero, quasi quia possimus, expedita quos iusto quibusdam quae nobis.'
-        ]
-    ];
-    $detail = Arr::first($rooms, function ($detail) use ($slug) {
-        return $detail['slug'] == $slug;
-    });
-    return view('detailpage/detail', ['title' => 'Single Post', 'detail' => $detail]);
-});
-
-Route::get('/bookingpage/booking/{slug}', function ($slug) {
-    $rooms = [
-        [
-            'slug' => 'kamar-1',
-            'title' => 'Kamar 1',
-            'price' => '100000',
-        ],
-        [
-            'slug' => 'kamar-2',
-            'title' => 'Kamar 2',
-            'price' => '200000',
-        ]
-    ];
-    $detail = Arr::first($rooms, function ($detail) use ($slug) {
-        return $detail['slug'] == $slug;
-    });
-    return view('bookingpage/booking', ['title' => 'Booking Page', 'rooms' => $detail]);
-});
-
-Route::post('/bookingpage/booking/{slug}', function (Request $request, $slug) {
-    $rooms = [
-        [
-            'slug' => 'kamar-1',
-            'title' => 'Kamar 1',
-            'price' => '100000',
-            'dorm_slug' => 'kos-1',
-        ],
-        [
-            'slug' => 'kamar-2',
-            'title' => 'Kamar 2',
-            'price' => '200000',
-            'dorm_slug' => 'kos-2',
-        ]
-    ];
-
-    $dorms = [
-        [
-            'slug' => 'kos-1',
-            'kos' => 'Kos Angkasa Putih',
-        ],
-        [
-            'slug' => 'kos-2',
-            'kos' => 'Kos Angkasa Merah',
-        ]
-    ];
-
-    $roomDetail = Arr::first($rooms, function ($detail) use ($slug) {
-        return $detail['slug'] == $slug;
-    });
-
-    $dormDetail = Arr::first($dorms, function ($detail) use ($roomDetail) {
-        return $detail['slug'] == $roomDetail['dorm_slug'];
-    });
-
-    $bulan = $request->input('bulan');
-    $tanggal = $request->input('tanggal');
-    $totalHarga = $roomDetail['price'] * $bulan;
-
-    // Store booking details in the session
-    $history = Session::get('history', []);
-    $history[] = [
-        'kos' => $dormDetail['kos'],
-        'kamar' => $roomDetail['title'],
-        'harga' => $totalHarga,
-        'tanggal' => $tanggal,
-    ];
-    Session::put('history', $history);
-
-    return redirect('/tagihan')->with([
-        'title' => 'Tagihan Page',
-        'rooms' => $roomDetail,
-        'bulan' => $bulan,
-        'tanggal' => $tanggal,
-        'totalHarga' => $totalHarga
-    ]);
-});
-
-Route::get('/tagihan', function () {
-    return view('tagihanpage/tagihan');
-});
-
-
-
-
+// Route::get('detailpage/detail/{slug}', function ($slug) {
+//     $rooms = [
+//         [
+//             'slug' => 'kamar-1',
+//             'title' => 'Kamar 1',
+//             'gambar' => 'img/kamar.jpg',
+//             'price' => '100000',
+//             'lokasi' => 'Surabaya',
+//             'fasilitas' => [],
+//             'body' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos et cupiditate soluta explicabo sapiente quaerat odio recusandae omnis nesciunt optio libero, quasi quia possimus, expedita quos iusto quibusdam quae nobis.'
+//         ],
+//         [
+//             'slug' => 'kamar-2',
+//             'title' => 'kamar 2',
+//             'gambar' => 'img/kamar2.jpg',
+//             'price' => '200000',
+//             'lokasi' => 'Malang',
+//             'fasilitas' => [],
+//             'body' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos et cupiditate soluta explicabo sapiente quaerat odio recusandae omnis nesciunt optio libero, quasi quia possimus, expedita quos iusto quibusdam quae nobis.'
+//         ]
+//     ];
+//     $detail = Arr::first($rooms, function ($detail) use ($slug) {
+//         return $detail['slug'] == $slug;
+//     });
+//     return view('detailpage/detail', ['title' => 'Single Post', 'detail' => $detail]);
+// });
 
 // Route::get('/owner/rooms/{slug}', function ($slug) {
 //     $dorms = [
@@ -410,25 +416,25 @@ Route::get('/tagihan', function () {
 //     return view('ownerpage/ownerroom', ['drooms' => $drooms, 'rooms' => $rooms]);
 // })->name('owner.rooms');
 
-Route::get('/ownerpage/updatedorm', function () {
-    return view('ownerpage/updatedorm');
-});
+// Route::get('/ownerpage/updatedorm', function () {
+//     return view('ownerpage/updatedorm');
+// });
 
-Route::get('/ownerpage/updateroom', function () {
-    return view('ownerpage/updateroom');
-});
+// Route::get('/ownerpage/updateroom', function () {
+//     return view('ownerpage/updateroom');
+// });
 
-// ! Profile
+
+
+// // ! Dump
+// Route::get('/about', function () {
+//     return view('about', ['nama' => 'Zumar']);
+// });
+
+
 Route::get('/history', function () {
+    // ! Profile
     $history = Session::get('history', []);
     Session::forget('history'); // Clear the history data from the session
     return view('historypay/history', ['history' => $history]);
-});
-
-
-
-
-// ! Dump
-Route::get('/about', function () {
-    return view('about', ['nama' => 'Zumar']);
 });

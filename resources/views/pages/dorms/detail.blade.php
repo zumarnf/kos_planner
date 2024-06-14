@@ -31,7 +31,7 @@
                             Open in Google Maps
                         </a>
                         <img alt="maps-{{ $dormDetail['name'] }}" class="absolute z-0 h-full object-cover"
-                            src="https://maps.googleapis.com/maps/api/staticmap?center={{ $dormDetail['latitude'] }},{{ $dormDetail['longtitude'] }}&zoom=15&size=800x400&maptype=roadmap&markers=color:red%7Clabel:A%7C{{ $dormDetail['latitude'] }},{{ $dormDetail['longtitude'] }} &key=AIzaSyBZEUifxCdvAiOQO2cs2neEI66am9aF6MQ">
+                            src="https://maps.googleapis.com/maps/api/staticmap?center={{ $dormDetail['latitude'] }},{{ $dormDetail['longtitude'] }}&zoom=15&size=800x400&maptype=roadmap&markers=color:red%7Clabel:A%7C{{ $dormDetail['latitude'] }},{{ $dormDetail['longtitude'] }} &key={{ env('GMAP_API_KEY') }}">
                     </div>
 
                     @if (Session::get('authUser')['role'] == 'owner')
@@ -60,7 +60,7 @@
                             </div>
                             <span class="font-bold text-red-600">{{ $room['price'] }}</span>
                         </div>
-                        <a href="{{ route('owner.detail.rooms', ['id' => $room['id']]) }}"
+                        <a href="{{ route(session('authUser')['role'] .'.detail.rooms', ['id' => $room['id']]) }}"
                             class="rounded-md bg-black-blue py-2 text-center text-gray-50 hover:bg-green-gd">Detail</a>
                     </div>
                 </div>
