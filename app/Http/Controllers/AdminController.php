@@ -9,7 +9,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $response = Http::withToken(session('auth_token'))->get('http://server.test/api/v1/admin/owners');
+        $response = Http::withToken(session('auth_token'))->get('http://127.0.0.1:8000/api/v1/admin/owners');
 
         // dd($response->json());
 

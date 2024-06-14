@@ -24,7 +24,7 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        $response = Http::post('http://server.test/api/v1/login', [
+        $response = Http::post('http://127.0.0.1:8000/api/v1/login', [
             'email' => $request['email'],
             'password' => $request['password'],
         ]);
@@ -55,7 +55,7 @@ class AuthController extends Controller
             'gender' => ['required'],
         ]);
 
-        $response = Http::post('http://server.test/api/v1/register', [
+        $response = Http::post('http://127.0.0.1:8000/api/v1/register', [
             'name' => $request['name'],
             'phone' => $request['phone'],
             'email' => $request['email'],
@@ -75,7 +75,7 @@ class AuthController extends Controller
 
     public function doLogout()
     {
-        $response = Http::withToken(session('auth_token'))->post('http://server.test/api/v1/logout');
+        $response = Http::withToken(session('auth_token'))->post('http://127.0.0.1:8000/api/v1/logout');
 
         session()->forget('auth_token');
 
